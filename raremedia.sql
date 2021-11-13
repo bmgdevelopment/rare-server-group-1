@@ -13,13 +13,12 @@ CREATE TABLE "Users" (
 );
 
 CREATE TABLE "DemotionQueue" (
-  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "action" varchar,
   "admin_id" INTEGER,
   "approver_one_id" INTEGER,
   FOREIGN KEY(`admin_id`) REFERENCES `Users`(`id`),
   FOREIGN KEY(`approver_one_id`) REFERENCES `Users`(`id`),
-  PRIMARY KEY (`action`, `admin_id`, `approver_one_id`)
+  PRIMARY KEY (action, admin_id, approver_one_id)
 );
 
 CREATE TABLE "Subscriptions" (
@@ -90,5 +89,3 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
-
-SELECT * FROM Categories
