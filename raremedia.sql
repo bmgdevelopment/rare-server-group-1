@@ -127,4 +127,3 @@ INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', tru
 
 -- Post Tags
 INSERT INTO PostTags VALUES (null, 2, 1)
-
