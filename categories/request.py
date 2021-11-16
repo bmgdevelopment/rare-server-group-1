@@ -48,3 +48,23 @@ def get_all_categories():
             categories.append(category.__dict__)
             
     return json.dumps(categories)
+
+
+def create_category(new_cat):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        INSERT INTO Categories
+            (label)
+        VALUES
+            (?);
+        """, (new_cat['label'], ))
+        
+        id = db_cursor.lastrowid
+        
+        new_cat['id'] = id
+        
+    return json.dumps(new_cat)
+        
+        

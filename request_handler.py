@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from categories import get_single_category, get_all_categories
-
+from categories import get_single_category, get_all_categories, create_category
+import json
 
 class HandleRequests(BaseHTTPRequestHandler):
     
@@ -63,7 +63,21 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.wfile.write(response.encode())
         
         
-
+    def do_POST(self):
+        self._set_headers(201)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        
+        post_body = json.loads(post_body)
+        
+        (resource, id) = self.parse_url(self.path)
+        
+        new_category = None
+        
+        if resource == "categories":
+            new_category = create_category(post_body)
+            
+            self.wfile.write(f"{new_category}".encode())
 
 
 def main(): 
