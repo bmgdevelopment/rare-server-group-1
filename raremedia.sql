@@ -89,6 +89,9 @@ CREATE TABLE 'Categories' (
 
 -- Categories Insert
 INSERT INTO Categories ('label') VALUES ('News');
+INSERT INTO Categories ('label') VALUES ('Entertainment');
+INSERT INTO Categories ('label') VALUES ('Comedy');
+INSERT INTO Categories ('label') VALUES ('Advice');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
@@ -133,3 +136,8 @@ SET is_staff = True
 WHERE is_staff = 'true'
 
 SELECT * FROM Users
+
+SELECT * FROM Categories
+
+DELETE FROM Categories WHERE label = 'News'
+
