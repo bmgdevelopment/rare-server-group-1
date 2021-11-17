@@ -3,8 +3,10 @@ import json
 
 
 from users import (
+    create_user,
     get_all_users,
-    get_single_user
+    get_single_user,
+    get_user_by_email
 )
 
 
@@ -54,6 +56,23 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.end_headers()
 
 
+    def do_POST(self):
+        self._set_headers(201)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+
+        post_body = json.loads(post_body)
+
+        (resource, id) = self.parse_url(self.path)
+
+        new_user = None
+
+        if resource == "animals":
+            new_animal = create_user(post_body)
+
+        self.wfile.write(f"{new_user}".encode())
+
+
     def do_GET(self):
         self._set_headers(200)
 
@@ -70,11 +89,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f'{get_all_users()}'
 
-        # elif len(parsed) == 3:
-        #     ( resource, key, value ) = parsed
+        elif len(parsed) == 3:
+            ( resource, key, value ) = parsed
 
-        #     if key == "email" and resource == "users":
-        #         response = get_users_by_email(value)
+            if key == "email" and resource == "users":
+                response = get_user_by_email(value)
 
         self.wfile.write(response.encode())
 
