@@ -67,8 +67,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         new_user = None
 
-        if resource == "animals":
-            new_animal = create_user(post_body)
+        if resource == "users":
+            new_user = create_user(post_body)
 
         self.wfile.write(f"{new_user}".encode())
 
