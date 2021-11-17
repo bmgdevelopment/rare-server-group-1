@@ -89,6 +89,9 @@ CREATE TABLE 'Categories' (
 
 -- Categories Insert
 INSERT INTO Categories ('label') VALUES ('News');
+INSERT INTO Categories ('label') VALUES ('Entertainment');
+INSERT INTO Categories ('label') VALUES ('Comedy');
+INSERT INTO Categories ('label') VALUES ('Advice');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
@@ -127,3 +130,9 @@ INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', tru
 
 -- Post Tags
 INSERT INTO PostTags VALUES (null, 2, 1)
+
+
+SELECT * FROM Categories
+
+DELETE FROM Categories WHERE label = 'News'
+
