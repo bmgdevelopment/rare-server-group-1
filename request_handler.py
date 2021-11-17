@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
 from comments import get_all_comments
+from users import create_user, login_user
 
 class HandleRequests(BaseHTTPRequestHandler):
 
@@ -79,6 +80,41 @@ class HandleRequests(BaseHTTPRequestHandler):
         #         response = get_customers_by_email(str(value))
 
         self.wfile.write(response.encode())
+
+    def do_POST(self):
+
+        content_len = int(self.headers.get('content-length',0))
+        raw_body = self.rfile.read(content_len)
+        post_body = json.loads(raw_body)
+
+        response = None
+
+        if self.path == '/login':
+            user_id = login_user(post_body)
+            if user_id:
+                response = {
+                    'valid': True,
+                    'token': user_id
+                }
+                self._set_headers(200)
+            else:
+                response = { 'valid': False }
+                self._set_headers(404)
+
+        if self.path == '/register':
+            try:
+                new_user = create_user(post_body)
+                response = {
+                    'valid': True,
+                    'token': new_user.id
+                }
+            except Exception as e:
+                response = {
+                    'valid': False,
+                    'error': str(e)
+                }
+            self._set_headers(201)
+        self.wfile.write(json.dumps('it worked').encode())
 
 # This function is not inside the class. It is the starting
 # point of this application.
