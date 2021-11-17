@@ -1,5 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories import get_single_category, get_all_categories, create_category
+from users import (create_user, get_all_users, get_single_user, get_user_by_email)
+
 import json
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -47,19 +49,31 @@ class HandleRequests(BaseHTTPRequestHandler):
         
     def do_GET(self):
         self._set_headers(200)
-        response = {}
-        
+        response = {}        
         parsed = self.parse_url(self.path)
         
         if len(parsed) == 2:
             ( resource, id ) = parsed
             
-            if resource == "categories":
+            if resource == "users":
+                if id is not None:
+                    response = f'{get_single_user(id)}'
+                else:
+                    response = f'{get_all_users()}'
+            elif resource == "categories":
                 if id is not None: 
                     response = f"{get_single_category(id)}"
                 else: 
                     response = f"{get_all_categories()}"
-                    
+              
+              
+        elif len(parsed) == 3:
+            ( resource, key, value ) = parsed
+
+            if key == "email" and resource == "users":
+                response = get_user_by_email(value)
+                      
+                      
         self.wfile.write(response.encode())
         
         
@@ -72,11 +86,16 @@ class HandleRequests(BaseHTTPRequestHandler):
         
         (resource, id) = self.parse_url(self.path)
         
+        new_user = None
+
+        if resource == "users":
+            new_user = create_user(post_body)
+            self.wfile.write(f"{new_user}".encode())
+        
         new_category = None
         
         if resource == "categories":
-            new_category = create_category(post_body)
-            
+            new_category = create_category(post_body)            
             self.wfile.write(f"{new_category}".encode())
 
 
@@ -84,3 +103,4 @@ def main():
     host = ''
     port = 8088
     HTTPServer((host, port), HandleRequests).serve_forever()
+    

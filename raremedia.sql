@@ -100,16 +100,16 @@ INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
 -- Users Insert
-INSERT INTO Users VALUES (null, 'Melody', 'Barker', 'melb@gmail.com',
-    'hi', 'melodyb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', 'active', 'true');
+INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com',
+    'hi', 'melodyb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 INSERT INTO Users VALUES (null, 'Stephanie', 'Hamilton', 'steph_ham@e15.com',
-    'hooray', 'stephanieh', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', 'active', 'true');
+    'hooray', 'stephanieh', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 INSERT INTO Users VALUES (null, 'Sam', 'Barker', 'sam_b@e15.com',
-    'woo', 'samb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', 'active', 'true');
+    'woo', 'samb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 INSERT INTO Users VALUES (null, 'Blake', 'McAdams', 'blake_m@e15.com',
-    'hi', 'blakem', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', 'active', true);
+    'hi', 'blakem', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 INSERT INTO Users VALUES (null, 'Brittany', 'Garrett', 'brittany_g@e15.com',
-    'hooray', 'brittanyg', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', 'active', true);
+    'hooray', 'brittanyg', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 
 -- DemotionQueue Insert
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
@@ -132,7 +132,7 @@ INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', tru
 INSERT INTO PostTags VALUES (null, 2, 1)
 
 
-
 SELECT * FROM Categories
 
 DELETE FROM Categories WHERE label = 'News'
+
