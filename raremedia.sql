@@ -125,3 +125,6 @@ INSERT INTO Posts VALUES (null, 1, 1, 'title1', 20211114, 'url1', 'content1', tr
 INSERT INTO Posts VALUES (null, 3, 1, 'title2', 20211116, 'url2', 'content2', false);
 INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', true);
 
+-- Post Tags
+INSERT INTO PostTags VALUES (null, 2, 1);
+
