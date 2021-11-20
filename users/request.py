@@ -2,9 +2,47 @@ import sqlite3
 import json
 from models import User
 
+
+def login_user(user_data):
+    with sqlite3.connect("./raremedia.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+            SELECT * FROM Users u
+            WHERE
+            u.username = ?
+            AND
+            u.password = ?;
+        """, (user_data['username'], user_data['password']))
+
+        result = db_cursor.fetchone()
+
+        if not result:
+            return None
+        else:
+            return User(**result)
+
+
+def create_user(post_data):
+    new_user = User(**post_data)
+
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        INSERT INTO Users
+            ( first_name, last_name, email, bio, username, password, profile_image_url, created_on, active, is_staff )
+        VALUES
+            ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
+        """, ( new_user.first_name, new_user.last_name, new_user.email, new_user.bio, new_user.username, new_user.password, new_user.profile_image_url, new_user.created_on, new_user.active, new_user.is_staff ))
+
+        id = db_cursor.lastrowid
+        new_user.id = id
+
+    return new_user
+
+
 def get_all_users():
     with sqlite3.connect('./raremedia.db') as conn:
-
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -29,9 +67,7 @@ def get_all_users():
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            user = User(row['id'], row['first_name'], row['last_name'], row['email'], row['bio'],
-                        row['username'], row['password'], row['profile_image_url'], row['created_on'],
-                        row['active'], row['is_staff'])
+            user = User(**row)
             users.append(user.__dict__)
 
     return json.dumps(users)
@@ -66,24 +102,6 @@ def get_single_user(id):
                     data['active'], data['is_staff'])
 
         return json.dumps(user.__dict__)
-
-
-def create_user(new_user):
-    with sqlite3.connect('./raremedia.db') as conn:
-        db_cursor = conn.cursor()
-
-        db_cursor.execute("""
-        INSERT INTO User
-            ( first_name, last_name, bio, username, profile_image_url, created_on, active, is_staff, email, password )
-        VALUES
-            ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
-        """, (new_user['first_name'], new_user['last_name'], new_user['email'], new_user['bio'], new_user['username'], new_user['password'], new_user['profile_image_url'], new_user['created_on'], new_user['active'], new_user['is_staff'] ))
-
-        id = db_cursor.lastrowid
-
-        new_user['id'] = id
-
-    return json.dumps(new_user)
 
 
 def get_user_by_email(email):

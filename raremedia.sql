@@ -92,6 +92,7 @@ INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Categories ('label') VALUES ('Entertainment');
 INSERT INTO Categories ('label') VALUES ('Comedy');
 INSERT INTO Categories ('label') VALUES ('Advice');
+INSERT INTO Categories ('label') VALUES ('SaturdayTest');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
@@ -100,16 +101,8 @@ INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
 -- Users Insert
-INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com',
-    'hi', 'melodyb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
-INSERT INTO Users VALUES (null, 'Stephanie', 'Hamilton', 'steph_ham@e15.com',
-    'hooray', 'stephanieh', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
-INSERT INTO Users VALUES (null, 'Sam', 'Barker', 'sam_b@e15.com',
-    'woo', 'samb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
-INSERT INTO Users VALUES (null, 'Blake', 'McAdams', 'blake_m@e15.com',
-    'hi', 'blakem', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
-INSERT INTO Users VALUES (null, 'Brittany', 'Garrett', 'brittany_g@e15.com',
-    'hooray', 'brittanyg', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
+INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com', null, 'melb@gmail.com', '123', null, '2021-11-19', true, true);
+INSERT INTO `Users` VALUES (null, 'Mr', 'Test', 'test@gmail.com', null, 'test@gmail.com', '123', null, '2021-11-19', true, true);
 
 -- DemotionQueue Insert
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
@@ -132,9 +125,8 @@ INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', tru
 INSERT INTO PostTags VALUES (null, 2, 1)
 
 
-SELECT * FROM Categories
+SELECT * FROM Users
 
-DELETE FROM Categories WHERE label = 'News'
 
 SELECT * FROM Posts
 
@@ -143,3 +135,6 @@ INSERT INTO Subscriptions VALUES (null, 2, 1, "2021-11-18 21:24:42.447392", "202
 INSERT INTO Subscriptions VALUES (null, 1, 2, "2021-11-18 21:24:42.447392", "2021-11-18 21:24:42.447392")
 
 SELECT * FROM Subscriptions
+
+DROP TABLE Users
+
