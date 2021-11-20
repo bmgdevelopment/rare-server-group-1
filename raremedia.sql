@@ -101,7 +101,7 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 
 -- Users Insert
 INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com',
-    'hi', 'melodyb', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
+    'null', 'melb@gmail.com', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 INSERT INTO Users VALUES (null, 'Stephanie', 'Hamilton', 'steph_ham@e15.com',
     'hooray', 'stephanieh', 'password', 'https://media.istockphoto.com/photos/dog-with-paper-bag-on-head-picture-id870925814', '20211113', true, true);
 INSERT INTO Users VALUES (null, 'Sam', 'Barker', 'sam_b@e15.com',
@@ -132,7 +132,6 @@ INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', tru
 INSERT INTO PostTags VALUES (null, 2, 1)
 
 
-SELECT * FROM Categories
+SELECT * FROM Users
 
-DELETE FROM Categories WHERE label = 'News'
-
+Delete from Users
