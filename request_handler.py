@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories import get_single_category, get_all_categories, create_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email)
+from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
 
 import json
 
@@ -65,14 +66,21 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_category(id)}"
                 else: 
                     response = f"{get_all_categories()}"
-              
+            elif resource == "subscriptions":
+                if id is not None: 
+                    response = f"{get_single_subscription(id)}"
+                else: 
+                    response = f"{get_all_subscriptions()}"
               
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
 
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
-                      
+                
+            elif key == "author_id" and resource == "subscriptions":
+                response = get_subscription_by_author_id(value)
+            
                       
         self.wfile.write(response.encode())
         
@@ -98,6 +106,12 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_category = create_category(post_body)            
             self.wfile.write(f"{new_category}".encode())
 
+        new_subscription = None
+        
+        
+        if resource == "subscriptions":
+            new_subscription = create_subscription(post_body)
+            self.wfile.write(f"{new_subscription}".encode())
 
 def main(): 
     host = ''

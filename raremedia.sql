@@ -136,3 +136,10 @@ SELECT * FROM Categories
 
 DELETE FROM Categories WHERE label = 'News'
 
+SELECT * FROM Posts
+
+
+INSERT INTO Subscriptions VALUES (null, 2, 1, "2021-11-18 21:24:42.447392", "2021-11-18 21:24:42.447392");
+INSERT INTO Subscriptions VALUES (null, 1, 2, "2021-11-18 21:24:42.447392", "2021-11-18 21:24:42.447392")
+
+SELECT * FROM Subscriptions
