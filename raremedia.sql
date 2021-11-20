@@ -92,6 +92,7 @@ INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Categories ('label') VALUES ('Entertainment');
 INSERT INTO Categories ('label') VALUES ('Comedy');
 INSERT INTO Categories ('label') VALUES ('Advice');
+INSERT INTO Categories ('label') VALUES ('SaturdayTest');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
@@ -134,4 +135,4 @@ INSERT INTO PostTags VALUES (null, 2, 1)
 
 SELECT * FROM Users
 
-Delete from Users
+DROP TABLE Users

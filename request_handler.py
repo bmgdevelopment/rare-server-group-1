@@ -77,6 +77,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
+        (resource, id) = self.parse_url(self.path)
+
 
         response = None
 
@@ -105,6 +107,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
+
+        new_category = None
+      
+        if resource == "categories":
+           new_category = create_category(post_body)           
+           self.wfile.write(f"{new_category}".encode())
+
 
         self.wfile.write(json.dumps(response).encode())
 
