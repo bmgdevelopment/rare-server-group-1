@@ -1,4 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from categories import get_single_category, get_all_categories, create_category
+from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 from posts import( 
 get_all_posts,
 get_single_post,
@@ -8,37 +10,31 @@ update_post
 )
 import json
 
-from posts.request import create_post, update_post
-
-class HandleRequests(BaseHTTPRequestHandler):
+class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
-        path_params = path.split("/")
+        path_params = path.split('/')
         resource = path_params[1]
-        
-        if "?" in resource:
-            
 
-            param = resource.split("?")[1]  
-            resource = resource.split("?")[0]  
-            pair = param.split("=")  
-            key = pair[0]  
-            value = pair[1]  
+        if '?' in resource:
+            param = resource.split('?')[1]
+            resource = resource.split('?')[0]
+            pair = param.split('=')
+            key = pair[0]
+            value = pair[1]
 
             return ( resource, key, value )
 
-        
         else:
             id = None
 
             try:
                 id = int(path_params[2])
             except IndexError:
-                pass 
+                pass
             except ValueError:
-                pass 
+                pass
 
-            return (resource, id) 
-    
+        return (resource, id)
 
     def _set_headers(self, status):
         self.send_response(status)
@@ -46,55 +42,110 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
-    
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods',
-                         'GET, POST, PUT, DELETE')
-        self.send_header('Access-Control-Allow-Headers',
-                         'X-Requested-With, Content-Type, Accept')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
-        
+
     def do_GET(self):
         self._set_headers(200)
         response = {}
-        
         parsed = self.parse_url(self.path)
-        
+
         if len(parsed) == 2:
-            (resource, id) = parsed
-            
+            ( resource, id ) = parsed
+
             if resource == "posts":
                 if id is not None:
-                    response = f"{get_single_post(id)}"
-                    
+                    response = f"{get_single_post(id)}"    
                 else: 
                     response = f"{get_all_posts()}"
-            
-                
-                # self.wfile.write(response.encode())
-                
-        self.wfile.write(f"{response}".encode())
-        
+            elif resource == "users":
+                if id is not None:
+                    response = f'{get_single_user(id)}'
+                else:
+                    response = f'{get_all_users()}'
+            elif resource == "categories":
+                if id is not None:
+                    response = f"{get_single_category(id)}"
+                else:
+                    response = f"{get_all_categories()}"
+
+
+        elif len(parsed) == 3:
+            ( resource, key, value ) = parsed
+
+            if key == "email" and resource == "users":
+                response = get_user_by_email(value)
+
+
+        self.wfile.write(response.encode())
+
+
     def do_POST(self):
-        self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
-        post_body = self.rfile.read(content_len)
-        
-        post_body = json.loads(post_body)
-        
+        raw_body = self.rfile.read(content_len)
+        post_body = json.loads(raw_body)
         (resource, id) = self.parse_url(self.path)
-        
-        new_post = None 
+
+
+        response = None
+
+        if self.path == '/login':
+            user = login_user(post_body)
+            if user:
+                response = {
+                    'valid': True,
+                    'token': user.id
+                }
+                self._set_headers(200)
+            else:
+                response = { 'valid': False }
+                self._set_headers(404)
+
+        if self.path == '/register':
+            try:
+                new_user = create_user(post_body)
+                response = {
+                    'valid': True,
+                    'token': new_user.id
+                }
+            except Exception as e:
+                response = {
+                    'valid': False,
+                    'error': str(e)
+                }
+            self._set_headers(201)
+        new_post = None
+        new_category = None
+      
+        if resource == "categories":
+           new_category = create_category(post_body)           
+           self.wfile.write(f"{new_category}".encode())
+ 
         
         if resource == "posts":
             new_post = create_post(post_body)
             
-            self.wfile.write(f"{new_post}".encode())   
-    
-    
-    def do_PUT(self):
+            self.wfile.write(f"{new_post}".encode())
+            
+        self.wfile.write(json.dumps(response).encode())
+        
+        
+def do_DELETE(self):
+        self._set_headers(204)
+        
+        (resource, id) = self.parse_url(self.path)   
+        
+        if resource == "employees":
+            delete_post(id) 
+            
+        self.wfile.write("".encode())
+        
+        
+def do_PUT(self):
         self._set_headers(204)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
@@ -113,23 +164,13 @@ class HandleRequests(BaseHTTPRequestHandler):
             self._set_headers(404)
             
         self.wfile.write("".encode())
-    
-    
-        
-    def do_DELETE(self):
-        self._set_headers(204)
-        
-        (resource, id) = self.parse_url(self.path)   
-        
-        if resource == "employees":
-            delete_post(id) 
-            
-        self.wfile.write("".encode())
+
 
 def main():
     host = ''
     port = 8088
-    HTTPServer((host, port), HandleRequests).serve_forever()
+    print(f'listening on port {port}!')
+    HTTPServer((host, port), RareRequestHandler).serve_forever()
 
 
 if __name__ == "__main__":
