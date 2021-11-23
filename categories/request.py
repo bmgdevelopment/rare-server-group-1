@@ -67,4 +67,40 @@ def create_category(new_cat):
         
     return json.dumps(new_cat)
         
+
+# DELETE CATEGORY 
+# ----------------
+def delete_category(id):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM Categories
+        WHERE id = ?
+        """, (id, ))
+
+
+# UPDATE CATEGORY 
+# ----------------
+def update_category(id, new_cat):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Categories
+            SET
+                label = ?
+        WHERE id = ?
+        """, (new_cat['label'], id, ))
+     
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True
+
+
         

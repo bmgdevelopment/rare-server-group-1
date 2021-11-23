@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from categories import get_single_category, get_all_categories, create_category
+from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 
 import json
@@ -116,6 +116,45 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
 
         self.wfile.write(json.dumps(response).encode())
+
+
+    def do_PUT(self):
+            content_len = int(self.headers.get('content-length', 0))
+            post_body = self.rfile.read(content_len)
+            post_body = json.loads(post_body)
+
+            # Parse the URL
+            (resource, id) = self.parse_url(self.path)
+
+            success = False
+
+            if resource == "categories":
+                success = update_category(id, post_body)
+            # rest of the elif's
+
+            if success:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
+
+            self.wfile.write("".encode())
+
+
+    def do_DELETE(self):
+    # Set a 204 response code
+        self._set_headers(204)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        # DELETE ONE CATEGORY
+        # ------------------
+        # Delete a single category from the list
+        if resource == "categories":
+            delete_category(id)
+
+        # Encode the new category and send in response
+            self.wfile.write("".encode())
 
 
 def main():
