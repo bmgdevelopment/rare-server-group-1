@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories import get_single_category, get_all_categories, create_category
+from posts.request import get_post_by_title
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 from posts import( 
 get_all_posts,
@@ -80,6 +81,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
 
+            if key == "title" and resource == "posts":
+                response = get_post_by_title(value)
 
         self.wfile.write(response.encode())
 

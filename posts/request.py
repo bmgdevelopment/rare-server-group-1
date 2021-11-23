@@ -2,38 +2,38 @@ import sqlite3
 import json
 from models import Posts
 
-POSTS = [
-    {
-        "id": 1,
-        "user_id": 1,
-        "category_id": 1,
-        "title": "Food Products",
-        "publication_date": "21 November 2021",
-        "image_url": "placeholder",
-        "content": '',
-        "approved": ''
-    },
-    {
-       "id": 2,
-        "user_id": 1,
-        "category_id": 2,
-        "title": "Food Products",
-        "publication_date": "21 November 2021",
-        "image_url": "image goes here",
-        "content": '',
-        "approved": '' 
-    },
-    {
-        "id": 3,
-        "user_id": 1,
-        "category_id": 2,
-        "title": "Fancy Example",
-        "publication_date": "20 November 2021",
-        "image_url": "placeholder",
-        "content": '',
-        "approved": ''
-    }
-]
+# POSTS = [
+#     {
+#         "id": 1,
+#         "user_id": 1,
+#         "category_id": 1,
+#         "title": "Food Products",
+#         "publication_date": "21 November 2021",
+#         "image_url": "placeholder",
+#         "content": '',
+#         "approved": ''
+#     },
+#     {
+#        "id": 2,
+#         "user_id": 1,
+#         "category_id": 2,
+#         "title": "Food Products",
+#         "publication_date": "21 November 2021",
+#         "image_url": "image goes here",
+#         "content": '',
+#         "approved": '' 
+#     },
+#     {
+#         "id": 3,
+#         "user_id": 1,
+#         "category_id": 2,
+#         "title": "Fancy Example",
+#         "publication_date": "20 November 2021",
+#         "image_url": "placeholder",
+#         "content": '',
+#         "approved": ''
+#     }
+# ]
 
 
 def get_all_posts():
@@ -123,6 +123,8 @@ def delete_post(id):
         WHERE id = ?
         """, (id, ))
         
+
+        
         
         
 def update_post(id, new_post):
@@ -130,7 +132,7 @@ def update_post(id, new_post):
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
-        UPDATE Animal
+        UPDATE Posts
             SET
                 user_id = ?,
                 category_id = ?,
@@ -151,5 +153,34 @@ def update_post(id, new_post):
         
         return False
     else:
-        
         return True
+    
+    
+def get_post_by_title(title):
+    with sqlite3.connect("./raremedia.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        select
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.content,
+            p.approved
+        from Posts p
+        WHERE p.title = ?
+        """, ( title, ))
+        
+        posts = []
+        dataset = db_cursor.fetchall()
+        
+        for row in dataset:
+            post = Posts(row['id'], row['user_id'], row['category_id'], row['title'],
+                            row['publication_date'], row['image_url'],
+                            row['content'], row['approved'])
+            posts.append(post.__dict__)
+            
+    return json.dumps(posts)
