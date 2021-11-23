@@ -97,9 +97,7 @@ def get_single_user(id):
 
         data = db_cursor.fetchone()
 
-        user = User(data['id'], data['first_name'], data['last_name'], data['email'], data['bio'],
-                    data['username'], data['password'], data['profile_image_url'], data['created_on'],
-                    data['active'], data['is_staff'])
+        user = User(**data)
 
         return json.dumps(user.__dict__)
 

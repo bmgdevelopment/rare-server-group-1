@@ -92,6 +92,7 @@ INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Categories ('label') VALUES ('Entertainment');
 INSERT INTO Categories ('label') VALUES ('Comedy');
 INSERT INTO Categories ('label') VALUES ('Advice');
+INSERT INTO Categories ('label') VALUES ('SaturdayTest');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
@@ -99,17 +100,16 @@ INSERT INTO Tags ('label') VALUES ('JavaScript');
 -- Reactions Insert
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
+
 -- -- Users Insert
 INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com', null, 'melb@gmail.com', '123', null, '2021-11-19', true, true);
-
-
-
+INSERT INTO `Users` VALUES (null, 'Sam', 'Barker', 'samb@gmail.com', null, 'samb@gmail.com', '123', null, '2021-11-19', true, false)
 
 -- DemotionQueue Insert
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
 
 -- Subscriptions Insert
-INSERT INTO Subscriptions VALUES (null, 1, 2, '20211113', 'current subscription' );
+INSERT INTO Subscriptions VALUES (null, 1, 2, '2021-11-13', 'current subscription' );
 
 -- Comments Insert
 INSERT INTO Comments VALUES (null, 2, 3, 'New comment for post', '2021112');
@@ -127,5 +127,5 @@ INSERT INTO PostTags VALUES (null, 2, 1)
 
 
 SELECT * FROM Users
+DROP TABLE Users
 
-Drop TABLE Users

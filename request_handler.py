@@ -1,7 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories import get_single_category, get_all_categories, create_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
-
 import json
 
 class RareRequestHandler(BaseHTTPRequestHandler):
@@ -53,9 +52,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
             if resource == "users":
                 if id is not None:
-                    response = f'{get_single_user(id)}'
+                    response = f"{get_single_user(id)}"
                 else:
-                    response = f'{get_all_users()}'
+                    response = f"{get_all_users()}"
             elif resource == "categories":
                 if id is not None:
                     response = f"{get_single_category(id)}"
@@ -77,6 +76,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('content-length', 0))
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
+        (resource, id) = self.parse_url(self.path)
+
 
         response = None
 
@@ -105,6 +106,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
+
+        new_category = None
+
+        if resource == "categories":
+            new_category = create_category(post_body)
+            self.wfile.write(f"{new_category}".encode())
+
 
         self.wfile.write(json.dumps(response).encode())
 
