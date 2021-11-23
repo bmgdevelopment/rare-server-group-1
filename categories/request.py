@@ -1,6 +1,5 @@
 import sqlite3
 import json
-# from sqlite3.dbapi2 import SQLITE_UPDATE
 
 from models import Category
 
