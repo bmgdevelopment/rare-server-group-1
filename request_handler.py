@@ -3,8 +3,9 @@ import json
 
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
+import tags
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
-from tags import get_all_tags, get_single_tag, create_tag, update_tag
+from tags import get_all_tags, get_single_tag, create_tag, update_tag, delete_tag
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -176,6 +177,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         # Delete a single category from the list
         if resource == "categories":
             delete_category(id)
+
+        # DELETE ONE TAG
+        # ------------------
+        # Delete a single tag from the list
+        if resource == "tags":
+            delete_tag(id)
 
         # Encode the new category and send in response
             self.wfile.write("".encode())
