@@ -3,9 +3,10 @@ from categories import get_single_category, get_all_categories, create_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email)
 from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
-
-
 import json
+from comments import get_all_comments, get_single_comment
+from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
+from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -65,6 +66,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_categories()}"
 
+
             elif resource == "subscriptions":
                 if id is not None: 
                     response = f"{get_single_subscription(id)}"
@@ -73,6 +75,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
               
 
 
+
+
+            elif resource == "comments":
+                if id is not None:
+                    response = f"{get_single_comment(id)}"
+                else:
+                    response = f"{get_all_comments()}"
 
 
         elif len(parsed) == 3:
@@ -142,6 +151,45 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             new_subscription = create_subscription(post_body)
             self.wfile.write(f"{new_subscription}".encode())
         self.wfile.write(json.dumps(response).encode())
+
+
+    def do_PUT(self):
+            content_len = int(self.headers.get('content-length', 0))
+            post_body = self.rfile.read(content_len)
+            post_body = json.loads(post_body)
+
+            # Parse the URL
+            (resource, id) = self.parse_url(self.path)
+
+            success = False
+
+            if resource == "categories":
+                success = update_category(id, post_body)
+            # rest of the elif's
+
+            if success:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
+
+            self.wfile.write("".encode())
+
+
+    def do_DELETE(self):
+    # Set a 204 response code
+        self._set_headers(204)
+
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+
+        # DELETE ONE CATEGORY
+        # ------------------
+        # Delete a single category from the list
+        if resource == "categories":
+            delete_category(id)
+
+        # Encode the new category and send in response
+            self.wfile.write("".encode())
 
 
 def main():
