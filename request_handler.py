@@ -123,13 +123,14 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         new_category = None
       
         if resource == "categories":
-           new_category = create_category(post_body)           
+           new_category = create_category(post_body)   
+           self._set_headers(201)        
            self.wfile.write(f"{new_category}".encode())
- 
+
         
         if resource == "posts":
             new_post = create_post(post_body)
-            
+            self._set_headers(201)
             self.wfile.write(f"{new_post}".encode())
             
         self.wfile.write(json.dumps(response).encode())
@@ -138,12 +139,15 @@ class RareRequestHandler(BaseHTTPRequestHandler):
     def do_DELETE(self):
         self._set_headers(204)
         
-        (resource, id) = self.parse_url(self.path)   
+        (resource, id) = self.parse_url(self.path) 
+        
+        if resource == "categories":
+            delete_category(id)  
         
         if resource == "posts":
             delete_post(id) 
             
-        self.wfile.write("".encode())
+        
         
         
 
@@ -161,7 +165,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             if resource == "categories":
                 success = update_category(id, post_body)
             # rest of the elif's
-            elif resource == "posts":
+            if resource == "posts":
                 success = update_post(id, post_body)
             
             if success:
@@ -172,21 +176,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write("".encode())
 
 
-    def do_DELETE(self):
-    # Set a 204 response code
-        self._set_headers(204)
-
-        # Parse the URL
-        (resource, id) = self.parse_url(self.path)
-
-        # DELETE ONE CATEGORY
-        # ------------------
-        # Delete a single category from the list
-        if resource == "categories":
-            delete_category(id)
-
-        # Encode the new category and send in response
-            self.wfile.write("".encode())
 
 
 def main():
