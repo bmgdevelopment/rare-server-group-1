@@ -1,29 +1,29 @@
 import sqlite3
 import json
 
-from models import Category
+from models import Tag
 
-def get_single_category(id):
+def get_single_tag(id):
     with sqlite3.connect("./raremedia.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
         
         db_cursor.execute("""
         SELECT
-            c.id,
-            c.label
-        FROM Categories c
-        WHERE c.id = ?
+            t.id,
+            t.label
+        FROM Tags t
+        WHERE t.id = ?
         """, (id, ))
         
         data = db_cursor.fetchone()
         
-        category = Category(data['id'], data['label'])
+        tag = Tag(data['id'], data['label'])
         
-        return json.dumps(category.__dict__)
+        return json.dumps(tag.__dict__)
     
 
-def get_all_categories():
+def get_all_tags():
     with sqlite3.connect("./raremedia.db") as conn:
         
         conn.row_factory = sqlite3.Row
@@ -31,65 +31,53 @@ def get_all_categories():
         
         db_cursor.execute("""
         SELECT
-            c.id,
-            c.label
-        FROM Categories c
-        """)    
+            t.id,
+            t.label
+        FROM Tags t
+        """)
         
-        categories = []
+        tags = []
         
         dataset = db_cursor.fetchall()
         
         for row in dataset:
-            category = Category(row['id'], row['label'])
+            tag = Tag(row['id'], row['label'])
             
-            categories.append(category.__dict__)
+            tags.append(tag.__dict__)
             
-    return json.dumps(categories)
+    return json.dumps(tags)
 
 
-def create_category(new_cat):
+def create_tag(new_tag):
     with sqlite3.connect("./raremedia.db") as conn:
         db_cursor = conn.cursor()
-        
+
         db_cursor.execute("""
-        INSERT INTO Categories
-            (label)
+        INSERT INTO Tags
+            ( label )
         VALUES
-            (?);
-        """, (new_cat['label'], ))
-        
+            ( ? );
+        """, (new_tag['label'], ))
+               
         id = db_cursor.lastrowid
-        
-        new_cat['id'] = id
-        
-    return json.dumps(new_cat)
-        
 
-# DELETE CATEGORY 
+        new_tag['id'] = id
+
+
+    return json.dumps(new_tag)
+
+# UPDATE TAG 
 # ----------------
-def delete_category(id):
+def update_tag(id, new_tag):
     with sqlite3.connect("./raremedia.db") as conn:
         db_cursor = conn.cursor()
 
         db_cursor.execute("""
-        DELETE FROM Categories
-        WHERE id = ?
-        """, (id, ))
-
-
-# UPDATE CATEGORY 
-# ----------------
-def update_category(id, new_cat):
-    with sqlite3.connect("./raremedia.db") as conn:
-        db_cursor = conn.cursor()
-
-        db_cursor.execute("""
-        UPDATE Categories
+        UPDATE Tags
             SET
                 label = ?
         WHERE id = ?
-        """, (new_cat['label'], id, ))
+        """, (new_tag['label'], id, ))
      
         rows_affected = db_cursor.rowcount
 
@@ -100,5 +88,13 @@ def update_category(id, new_cat):
         # Forces 204 response by main module
         return True
 
+# DELETE TAG 
+# ----------------
+def delete_tag(id):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
 
-        
+        db_cursor.execute("""
+        DELETE FROM Tags
+        WHERE id = ?
+        """, (id, ))

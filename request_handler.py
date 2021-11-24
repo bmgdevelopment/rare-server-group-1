@@ -3,7 +3,9 @@ import json
 
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
+import tags
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
+from tags import get_all_tags, get_single_tag, create_tag, update_tag, delete_tag
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -62,6 +64,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_category(id)}"
                 else:
                     response = f"{get_all_categories()}"
+            elif resource == "tags":
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = f"{get_all_tags()}"
+
             elif resource == "comments":
                 if id is not None:
                     response = f"{get_single_comment(id)}"
@@ -113,11 +121,19 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 }
             self._set_headers(201)
 
+        # CREATE NEW CATEGORY
         new_category = None
       
         if resource == "categories":
            new_category = create_category(post_body)           
            self.wfile.write(f"{new_category}".encode())
+
+        # CREATE NEW TAG
+        new_tag = None
+      
+        if resource == "tags":
+           new_category = create_tag(post_body)           
+           self.wfile.write(f"{new_tag}".encode())
 
 
         self.wfile.write(json.dumps(response).encode())
@@ -135,6 +151,10 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
             if resource == "categories":
                 success = update_category(id, post_body)
+            # rest of the elif's
+
+            elif resource == "tags":
+                success = update_tag(id, post_body)
             # rest of the elif's
 
             if success:
@@ -157,6 +177,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         # Delete a single category from the list
         if resource == "categories":
             delete_category(id)
+
+        # DELETE ONE TAG
+        # ------------------
+        # Delete a single tag from the list
+        if resource == "tags":
+            delete_tag(id)
 
         # Encode the new category and send in response
             self.wfile.write("".encode())
