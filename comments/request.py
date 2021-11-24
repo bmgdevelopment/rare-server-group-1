@@ -29,3 +29,6 @@ def get_all_comments():
             comments.append(comment.__dict__)
 
     return json.dumps(comments)
+
+def get_single_comment(id):
+    pass
