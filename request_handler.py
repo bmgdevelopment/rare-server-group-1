@@ -137,18 +137,18 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode())
         
         
-def do_DELETE(self):
+    def do_DELETE(self):
         self._set_headers(204)
         
         (resource, id) = self.parse_url(self.path)   
         
-        if resource == "employees":
+        if resource == "posts":
             delete_post(id) 
             
         self.wfile.write("".encode())
         
         
-def do_PUT(self):
+    def do_PUT(self):
         self._set_headers(204)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)

@@ -1,4 +1,4 @@
-from datetime import datetime
+
 
 class Posts():
     
@@ -7,7 +7,7 @@ class Posts():
         self.user_id = user_id
         self.category_id = category_id
         self.title = title
-        self.publication_date = publication_date or datetime.now()
+        self.publication_date = publication_date 
         self.image_url = image_url
         self.content = content
         self.approved = approved

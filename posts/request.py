@@ -2,40 +2,6 @@ import sqlite3
 import json
 from models import Posts
 
-# POSTS = [
-#     {
-#         "id": 1,
-#         "user_id": 1,
-#         "category_id": 1,
-#         "title": "Food Products",
-#         "publication_date": "21 November 2021",
-#         "image_url": "placeholder",
-#         "content": '',
-#         "approved": ''
-#     },
-#     {
-#        "id": 2,
-#         "user_id": 1,
-#         "category_id": 2,
-#         "title": "Food Products",
-#         "publication_date": "21 November 2021",
-#         "image_url": "image goes here",
-#         "content": '',
-#         "approved": '' 
-#     },
-#     {
-#         "id": 3,
-#         "user_id": 1,
-#         "category_id": 2,
-#         "title": "Fancy Example",
-#         "publication_date": "20 November 2021",
-#         "image_url": "placeholder",
-#         "content": '',
-#         "approved": ''
-#     }
-# ]
-
-
 def get_all_posts():
     with sqlite3.connect("./raremedia.db") as conn:
         
@@ -128,9 +94,9 @@ def delete_post(id):
         
         
 def update_post(id, new_post):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("./raremedia.db") as conn:
         db_cursor = conn.cursor()
-
+        updated_post = Posts(**new_post)
         db_cursor.execute("""
         UPDATE Posts
             SET
@@ -138,13 +104,13 @@ def update_post(id, new_post):
                 category_id = ?,
                 title = ?,
                 publication_date = ?,
-                image_url = ?
-                content = ?
+                image_url = ?,
+                content = ?,
                 approved = ?
         WHERE id = ?
-        """, (new_post['user_id'], new_post['category_id'],
-              new_post['title'], new_post['publication_date'],
-              new_post['image_url'], new_post['content'], new_post['approved'], id, ))
+        """, (updated_post.user_id, updated_post.category_id,
+              updated_post.title, updated_post.publication_date,
+              updated_post.image_url, updated_post.content, updated_post.approved, id ))
 
         
         rows_affected = db_cursor.rowcount
