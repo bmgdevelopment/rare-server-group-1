@@ -34,8 +34,7 @@ def get_all_categories():
             c.id,
             c.label
         FROM Categories c
-        """)
-        
+        """)    
         
         categories = []
         

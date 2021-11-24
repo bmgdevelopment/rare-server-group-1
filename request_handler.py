@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
-from tags import get_all_tags, get_single_tag
+from tags import get_all_tags, get_single_tag, create_tag, update_tag
 
 import json
 
@@ -114,11 +114,19 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 }
             self._set_headers(201)
 
+        # CREATE NEW CATEGORY
         new_category = None
       
         if resource == "categories":
            new_category = create_category(post_body)           
            self.wfile.write(f"{new_category}".encode())
+
+        # CREATE NEW TAG
+        new_tag = None
+      
+        if resource == "tags":
+           new_category = create_tag(post_body)           
+           self.wfile.write(f"{new_tag}".encode())
 
 
         self.wfile.write(json.dumps(response).encode())
@@ -136,6 +144,10 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
             if resource == "categories":
                 success = update_category(id, post_body)
+            # rest of the elif's
+
+            elif resource == "tags":
+                success = update_tag(id, post_body)
             # rest of the elif's
 
             if success:

@@ -46,3 +46,44 @@ def get_all_tags():
             tags.append(tag.__dict__)
             
     return json.dumps(tags)
+
+
+def create_tag(new_tag):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        INSERT INTO Tags
+            ( label )
+        VALUES
+            ( ? );
+        """, (new_tag['label'], ))
+               
+        id = db_cursor.lastrowid
+
+        new_tag['id'] = id
+
+
+    return json.dumps(new_tag)
+
+# UPDATE TAG 
+# ----------------
+def update_tag(id, new_tag):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Tags
+            SET
+                label = ?
+        WHERE id = ?
+        """, (new_tag['label'], id, ))
+     
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True
