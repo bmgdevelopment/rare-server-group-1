@@ -1,9 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import json
+
+from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 from tags import get_all_tags, get_single_tag, create_tag, update_tag
-
-import json
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -68,6 +69,11 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_tags()}"
 
+            elif resource == "comments":
+                if id is not None:
+                    response = f"{get_single_comment(id)}"
+                else:
+                    response = f"{get_all_comments()}"
 
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
