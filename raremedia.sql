@@ -104,7 +104,7 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 
 -- Users Insert
 INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com', null, 'melb@gmail.com', '123', null, '2021-11-19', true, true);
-INSERT INTO `Users` VALUES (null, 'Mr', 'Test', 'test@gmail.com', null, 'test@gmail.com', '123', null, '2021-11-19', true, true);
+INSERT INTO `Users` VALUES (null, 'Blake', 'McAdams', 'blakea@gmail.com', null, 'blakea@gmail.com', '123', null, '2021-11-19', true, true);
 
 -- DemotionQueue Insert
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
@@ -126,12 +126,14 @@ INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', tru
 -- Post Tags
 INSERT INTO PostTags VALUES (null, 2, 1)
 
-UPDATE users
-SET is_staff = True
-WHERE is_staff = 'true'
+UPDATE Users
+SET 
+    profile_image_url = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+WHERE id = 5
+
 
 SELECT * FROM Users
 
-SELECT * FROM Tags
+SELECT * FROM Posts
 
 DROP TABLE Users
