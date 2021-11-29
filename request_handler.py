@@ -65,18 +65,11 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_category(id)}"
                 else:
                     response = f"{get_all_categories()}"
-
-
             elif resource == "subscriptions":
                 if id is not None: 
                     response = f"{get_single_subscription(id)}"
                 else: 
                     response = f"{get_all_subscriptions()}"
-              
-
-
-
-
             elif resource == "comments":
                 if id is not None:
                     response = f"{get_single_comment(id)}"
@@ -94,11 +87,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             elif key == "author_id" and resource == "subscriptions":
                 response = get_subscription_by_author_id(value)
             
-                      
-
-
-
-
+                   
         self.wfile.write(response.encode())
 
 
@@ -140,7 +129,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         new_category = None
       
         if resource == "categories":
-           new_category = create_category(post_body)           
+           new_category = create_category(post_body) 
+           self._set_headers(201)          
            self.wfile.write(f"{new_category}".encode())
 
 
@@ -149,8 +139,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         
         if resource == "subscriptions":
             new_subscription = create_subscription(post_body)
+            self._set_headers(201) 
             self.wfile.write(f"{new_subscription}".encode())
-        self.wfile.write(json.dumps(response).encode())
+            #self.wfile.write(json.dumps(response).encode())
 
 
     def do_PUT(self):

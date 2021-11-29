@@ -67,9 +67,6 @@ def create_category(new_cat):
         
     return json.dumps(new_cat)
         
-<<<<<<< HEAD
-  
-=======
 
 # DELETE CATEGORY 
 # ----------------
@@ -107,4 +104,3 @@ def update_category(id, new_cat):
 
 
         
->>>>>>> main

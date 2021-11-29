@@ -1,6 +1,5 @@
 import sqlite3
 import json
-
 from models import Subscription
 
 def get_single_subscription(id):
@@ -52,8 +51,12 @@ def get_all_subscriptions():
             subscription = Subscription(row['id'], row['follower_id'], row['author_id'],
                                         row['created_on'], row['ended_on'])
             
-            subscriptions.append(subscription.__dict__)
-    
+            
+            subscription_dict = subscription.__dict__
+            subscription_dict['created_on'] = str(subscription.created_on)
+            subscription_dict['ended_on'] = str(subscription.ended_on)
+            subscriptions.append(subscription_dict)
+            
     return json.dumps(subscriptions)
 
 def get_subscription_by_author_id(author_id):
@@ -88,17 +91,20 @@ def get_subscription_by_author_id(author_id):
 def create_subscription(new_subscription):
     with sqlite3.connect("./raremedia.db") as conn:
         db_cursor = conn.cursor()
-        
+        subscription = Subscription(id = None, follower_id = new_subscription['follower_id'], author_id = new_subscription['author_id'])
         db_cursor.execute("""
         INSERT INTO Subscriptions
             ( follower_id, author_id, created_on, ended_on )
         VALUES
             ( ?, ?, ?, ?);
-        """, (new_subscription['follower_id'], new_subscription['author_id'], 
-              new_subscription['created_on'], new_subscription['ended_on'], ))
+        """, (subscription.follower_id, subscription.author_id, subscription.created_on, subscription.ended_on))
         
         id = db_cursor.lastrowid
         
+        
+        new_subscription['created_on'] = str(subscription.created_on)
+        new_subscription['ended_on'] = str(subscription.ended_on)
         new_subscription['id'] = id
+    
         
     return json.dumps(new_subscription)
