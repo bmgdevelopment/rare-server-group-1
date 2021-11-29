@@ -81,8 +81,7 @@ def get_subscription_by_author_id(author_id):
 
         for row in dataset:
             subscription = Subscription(row['id'], row['follower_id'], row['author_id'],
-                                        row['created_on'], row['ended_on'])
-            
+                                        row['created_on'], row['ended_on'])           
             subscriptions.append(subscription.__dict__)
 
     return json.dumps(subscriptions)
