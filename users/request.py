@@ -137,3 +137,40 @@ def get_user_by_email(email):
 
     return json.dumps(users)
 
+
+def update_user(id, new_user):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Users
+            SET
+                first_name = ?,
+                last_name = ?,
+                email = ?,
+                bio = ?,
+                username = ?,
+                password = ?,
+                profile_image_url = ?,
+                is_staff = ?
+        WHERE id = ?
+        """, (new_user['first_name'],new_user['last_name'],new_user['email'],
+            new_user['bio'], new_user['username'], new_user['password'],
+            new_user['profile_image_url'], new_user['is_staff'], id, ))
+
+        rows_affected = db_cursor.rowcount
+
+    if rows_affected == 0:
+        return False
+    else:
+        return True
+
+
+def delete_user(id):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM Users
+        WHERE id = ?
+        """, (id, ))
