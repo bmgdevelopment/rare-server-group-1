@@ -4,6 +4,7 @@ import json
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
+from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post)
 from tags import get_all_tags, get_single_tag, create_tag, update_tag, delete_tag
 
 class RareRequestHandler(BaseHTTPRequestHandler):
@@ -53,7 +54,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         if len(parsed) == 2:
             ( resource, id ) = parsed
 
-            if resource == "users":
+            if resource == "posts":
+                if id is not None:
+                    response = f"{get_single_post(id)}"    
+                else: 
+                    response = f"{get_all_posts()}"
+            elif resource == "users":
                 if id is not None:
                     response = f'{get_single_user(id)}'
                 else:
@@ -128,13 +134,30 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
+        
+       
 
+        # CREATE NEW CATEGORY
         new_category = None
       
         if resource == "categories":
-           new_category = create_category(post_body) 
-           self._set_headers(201)          
+           new_category = create_category(post_body)   
+           self._set_headers(201)        
            self.wfile.write(f"{new_category}".encode())
+
+        new_post = None
+        
+        if resource == "posts":
+            new_post = create_post(post_body)
+            self._set_headers(201)
+            self.wfile.write(f"{new_post}".encode())
+            
+        # CREATE NEW TAG
+        new_tag = None
+      
+        if resource == "tags":
+           new_category = create_tag(post_body)           
+           self.wfile.write(f"{new_tag}".encode())
 
 
         new_subscription = None
@@ -144,29 +167,35 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             new_subscription = create_subscription(post_body)
             self._set_headers(201) 
             self.wfile.write(f"{new_subscription}".encode())
-            #self.wfile.write(json.dumps(response).encode())
-
-
+      
+        
     def do_PUT(self):
-            content_len = int(self.headers.get('content-length', 0))
-            post_body = self.rfile.read(content_len)
-            post_body = json.loads(post_body)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
 
-            # Parse the URL
-            (resource, id) = self.parse_url(self.path)
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
 
-            success = False
+        success = False
 
-            if resource == "categories":
-                success = update_category(id, post_body)
-            # rest of the elif's
+        if resource == "categories":
+            success = update_category(id, post_body)
+        # rest of the elif's
+        elif resource == "posts":
+            success = update_post(id, post_body)
+        
+        elif resource == "tags":
+            success = update_tag(id, post_body)
+        # rest of the elif's
 
-            if success:
-                self._set_headers(204)
-            else:
-                self._set_headers(404)
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
 
-            self.wfile.write("".encode())
+        self.wfile.write("".encode())
+
 
 
     def do_DELETE(self):
@@ -182,8 +211,17 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         if resource == "categories":
             delete_category(id)
 
+        if resource == "posts":
+            delete_post(id) 
+        # DELETE ONE TAG
+        # ------------------
+        # Delete a single tag from the list
+        if resource == "tags":
+            delete_tag(id)
+
         # Encode the new category and send in response
             self.wfile.write("".encode())
+
 
 
 def main():

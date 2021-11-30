@@ -96,6 +96,8 @@ INSERT INTO Categories ('label') VALUES ('SaturdayTest');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
+INSERT INTO Tags ('label') VALUES ('React.js');
+INSERT INTO Tags ('label') VALUES ('Python');
 
 -- Reactions Insert
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
@@ -122,7 +124,7 @@ INSERT INTO Posts VALUES (null, 3, 1, 'title2', 20211116, 'url2', 'content2', fa
 INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', true);
 
 -- Post Tags
-INSERT INTO PostTags VALUES (null, 2, 1)
+INSERT INTO PostTags VALUES (null, 2, 1);
 
 UPDATE users
 SET is_staff = True
@@ -130,7 +132,7 @@ WHERE is_staff = 'true'
 
 SELECT * FROM Users
 
-SELECT * FROM Users
+SELECT * FROM Tags
 
 
 SELECT * FROM Posts
