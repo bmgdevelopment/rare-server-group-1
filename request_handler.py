@@ -96,7 +96,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         post_body = json.loads(raw_body)
         (resource, id) = self.parse_url(self.path)
 
-
         response = None
 
         if self.path == '/login':
@@ -146,7 +145,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         new_tag = None
       
         if resource == "tags":
-           new_category = create_tag(post_body)           
+           new_tag = create_tag(post_body)           
            self.wfile.write(f"{new_tag}".encode())
         
         # CREATE NEW COMMENT  
@@ -171,13 +170,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         if resource == "categories":
             success = update_category(id, post_body)
-        # rest of the elif's
+
         elif resource == "posts":
             success = update_post(id, post_body)
         
         elif resource == "tags":
             success = update_tag(id, post_body)
-        # rest of the elif's
 
         if success:
             self._set_headers(204)

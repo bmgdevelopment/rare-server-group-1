@@ -74,3 +74,5 @@ def create_comment(new_comment):
     
     return json.dumps(new_comment)
     
+def update_comment(id, new_comment):
+    pass
