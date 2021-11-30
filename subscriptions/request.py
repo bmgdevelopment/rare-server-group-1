@@ -60,7 +60,7 @@ def get_all_subscriptions():
     return json.dumps(subscriptions)
 
 def get_subscription_by_author_id(author_id):
-    with sqlite3.connect("./kennel.db") as conn:
+    with sqlite3.connect("./raremedia.db") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
