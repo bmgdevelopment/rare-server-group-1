@@ -120,7 +120,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             else:
                 response = { 'valid': False }
                 self._set_headers(404)
-
+                self.wfile.write(json.dumps(response).encode())
+            
         if self.path == '/register':
             try:
                 new_user = create_user(post_body)
@@ -134,7 +135,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
-        
+            self.wfile.write(json.dumps(response).encode())
        
 
         # CREATE NEW CATEGORY
