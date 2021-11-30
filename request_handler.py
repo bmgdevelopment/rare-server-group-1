@@ -3,7 +3,7 @@ import json
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
-from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post, get_post_by_title)
+from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post)
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -79,8 +79,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
 
-            if key == "title" and resource == "posts":
-                response = get_post_by_title(value)
 
         self.wfile.write(response.encode())
 
