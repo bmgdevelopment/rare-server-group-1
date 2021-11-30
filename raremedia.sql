@@ -96,6 +96,8 @@ INSERT INTO Categories ('label') VALUES ('SaturdayTest');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
+INSERT INTO Tags ('label') VALUES ('React.js');
+INSERT INTO Tags ('label') VALUES ('Python');
 
 -- Reactions Insert
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
@@ -130,6 +132,6 @@ WHERE is_staff = 'true'
 
 SELECT * FROM Users
 
-SELECT * FROM Users
+SELECT * FROM Tags
 
 DROP TABLE Users
