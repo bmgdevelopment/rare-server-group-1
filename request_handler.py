@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from comments import get_all_comments, get_single_comment
+from comments import get_all_comments, get_single_comment, create_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 import tags
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
@@ -69,7 +69,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_tag(id)}"
                 else:
                     response = f"{get_all_tags()}"
-
             elif resource == "comments":
                 if id is not None:
                     response = f"{get_single_comment(id)}"
@@ -81,7 +80,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
-
 
         self.wfile.write(response.encode())
 
@@ -134,11 +132,15 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         if resource == "tags":
            new_category = create_tag(post_body)           
            self.wfile.write(f"{new_tag}".encode())
-
-
-        self.wfile.write(json.dumps(response).encode())
-
-
+        
+        # CREATE NEW COMMENT  
+        new_comment = None
+        
+        if resource == "comments":
+            new_comment = create_comment(post_body)
+            self.wfile.write(f"{new_comment}".encode())
+            
+            
     def do_PUT(self):
             content_len = int(self.headers.get('content-length', 0))
             post_body = self.rfile.read(content_len)
