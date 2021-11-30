@@ -1,12 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from categories import get_single_category, get_all_categories, create_category
-from users import (create_user, get_all_users, get_single_user, get_user_by_email)
 from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
-from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 import json
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
+from tags import get_all_tags, get_single_tag, create_tag, update_tag, delete_tag
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -70,6 +68,11 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_subscription(id)}"
                 else: 
                     response = f"{get_all_subscriptions()}"
+            elif resource == "tags":
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = f"{get_all_tags()}"
             elif resource == "comments":
                 if id is not None:
                     response = f"{get_single_comment(id)}"
