@@ -132,8 +132,8 @@ UPDATE users
 SET is_staff = True
 WHERE is_staff = 'true';
 
-SELECT * FROM Users;
+SELECT * FROM Subscriptions
 
 SELECT * FROM Users
-DROP TABLE Users
+DROP TABLE Subscriptions
 

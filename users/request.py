@@ -166,6 +166,8 @@ def update_user(id, new_user):
         return True
 
 
+
+
 def delete_user(id):
     with sqlite3.connect("./raremedia.db") as conn:
         db_cursor = conn.cursor()
