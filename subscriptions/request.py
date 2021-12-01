@@ -107,3 +107,13 @@ def create_subscription(new_subscription):
     
         
     return json.dumps(new_subscription)
+
+def delete_subscription(id):
+    with sqlite3.connect("./raremedia.db") as conn:
+        
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+                          DELETE FROM Subscriptions
+                          WHERE id = ?
+                          """, (id,))

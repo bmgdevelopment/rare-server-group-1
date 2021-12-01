@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
+from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription,
+                           delete_subscription)
 import json
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
@@ -219,6 +220,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         # Delete a single tag from the list
         if resource == "tags":
             delete_tag(id)
+            
+        if resource == "subscriptions":
+            delete_subscription(id)
 
         # Encode the new category and send in response
             self.wfile.write("".encode())
