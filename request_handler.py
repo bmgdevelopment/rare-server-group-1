@@ -128,7 +128,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
-        
+        self.wfile.write(json.dumps(response).encode())
        
 
         # CREATE NEW CATEGORY
