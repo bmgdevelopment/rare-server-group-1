@@ -1,7 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
 import json
-from comments import get_all_comments, get_single_comment
+
+from comments import get_all_comments, get_single_comment, create_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
 from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post)
@@ -33,11 +34,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         return (resource, id)
 
+
     def _set_headers(self, status):
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
+
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -45,6 +48,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
+
 
     def do_GET(self):
         self._set_headers(200)
@@ -92,11 +96,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
 
-                
             elif key == "author_id" and resource == "subscriptions":
                 response = get_subscription_by_author_id(value)
             
-                   
         self.wfile.write(response.encode())
 
 
@@ -105,7 +107,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         raw_body = self.rfile.read(content_len)
         post_body = json.loads(raw_body)
         (resource, id) = self.parse_url(self.path)
-
 
         response = None
 
@@ -120,7 +121,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             else:
                 response = { 'valid': False }
                 self._set_headers(404)
-                self.wfile.write(json.dumps(response).encode())
+            self.wfile.write(json.dumps(response).encode())
             
         if self.path == '/register':
             try:
@@ -157,12 +158,17 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         new_tag = None
       
         if resource == "tags":
-           new_category = create_tag(post_body)           
+           new_tag = create_tag(post_body)           
            self.wfile.write(f"{new_tag}".encode())
-
-
-        new_subscription = None
         
+        # CREATE NEW COMMENT  
+        new_comment = None
+        
+        if resource == "comments":
+            new_comment = create_comment(post_body)
+            self.wfile.write(f"{new_comment}".encode())
+            
+        new_subscription = None
         
         if resource == "subscriptions":
             new_subscription = create_subscription(post_body)
@@ -182,13 +188,12 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         if resource == "categories":
             success = update_category(id, post_body)
-        # rest of the elif's
+
         elif resource == "posts":
             success = update_post(id, post_body)
         
         elif resource == "tags":
             success = update_tag(id, post_body)
-        # rest of the elif's
 
         if success:
             self._set_headers(204)
@@ -198,9 +203,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write("".encode())
 
 
-
     def do_DELETE(self):
-    # Set a 204 response code
         self._set_headers(204)
 
         # Parse the URL
@@ -222,7 +225,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         # Encode the new category and send in response
             self.wfile.write("".encode())
-
 
 
 def main():
