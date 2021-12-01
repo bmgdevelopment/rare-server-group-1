@@ -132,6 +132,8 @@ WHERE is_staff = 'true'
 
 SELECT * FROM Users
 
-SELECT * FROM Tags
+SELECT * FROM Posts
+ 
 
+ 
 DROP TABLE Users
