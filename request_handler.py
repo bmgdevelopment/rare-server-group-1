@@ -34,11 +34,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         return (resource, id)
 
+
     def _set_headers(self, status):
         self.send_response(status)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
+
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -46,6 +48,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
+
 
     def do_GET(self):
         self._set_headers(200)
@@ -200,9 +203,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write("".encode())
 
 
-
     def do_DELETE(self):
-    # Set a 204 response code
         self._set_headers(204)
 
         # Parse the URL
@@ -224,7 +225,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         # Encode the new category and send in response
             self.wfile.write("".encode())
-
 
 
 def main():
