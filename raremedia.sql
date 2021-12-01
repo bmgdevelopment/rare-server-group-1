@@ -136,12 +136,11 @@ WHERE is_staff = 'true';
 
 SELECT * FROM Users
 
+
 SELECT * FROM DemotionQueue
 DROP TABLE Users
 
-SELECT users.*, count(subscriptions.author_id) as number_of_subs
-from users
-left join subscriptions
-on (users.id = subscriptions.author_id)
-group by
-users.id
+SELECT * FROM Postsgit
+
+DROP TABLE Users
+
