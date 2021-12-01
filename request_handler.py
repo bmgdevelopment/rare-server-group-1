@@ -1,11 +1,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
 import json
 
 from comments import get_all_comments, get_single_comment, create_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
+from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
 from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
-from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post)
+from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post, get_post_by_title)
 from tags import get_all_tags, get_single_tag, create_tag, update_tag, delete_tag
 
 class RareRequestHandler(BaseHTTPRequestHandler):
@@ -83,18 +83,21 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     response = f"{get_single_tag(id)}"
                 else:
                     response = f"{get_all_tags()}"
+
             elif resource == "comments":
                 if id is not None:
                     response = f"{get_single_comment(id)}"
                 else:
                     response = f"{get_all_comments()}"
 
-
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
 
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
+                
+            if key == "title" and resource == "posts":
+                response = get_post_by_title(value)
 
             elif key == "author_id" and resource == "subscriptions":
                 response = get_subscription_by_author_id(value)
@@ -137,7 +140,6 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 }
             self._set_headers(201)
             self.wfile.write(json.dumps(response).encode())
-       
 
         # CREATE NEW CATEGORY
         new_category = None
@@ -160,6 +162,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         if resource == "tags":
            new_tag = create_tag(post_body)           
            self.wfile.write(f"{new_tag}".encode())
+           
+        
         
         # CREATE NEW COMMENT  
         new_comment = None
@@ -174,8 +178,15 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             new_subscription = create_subscription(post_body)
             self._set_headers(201) 
             self.wfile.write(f"{new_subscription}".encode())
-      
         
+        
+    
+            
+        
+        
+        
+
+
     def do_PUT(self):
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
