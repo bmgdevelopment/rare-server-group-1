@@ -96,13 +96,15 @@ INSERT INTO Categories ('label') VALUES ('SaturdayTest');
 
 -- Tags Insert
 INSERT INTO Tags ('label') VALUES ('JavaScript');
+INSERT INTO Tags ('label') VALUES ('React.js');
+INSERT INTO Tags ('label') VALUES ('Python');
 
 -- Reactions Insert
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
 
 -- -- Users Insert
-INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com', null, 'melb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, true);
+INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com', null, 'melb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', 'null', true, true);
 INSERT INTO `Users` VALUES (null, 'Sam', 'Barker', 'samb@gmail.com', null, 'samb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
 INSERT INTO `Users` VALUES (null, 'Brittany', 'Garrett', 'bmg@gmail.com', null, 'bmg@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
 INSERT INTO `Users` VALUES (null, 'Stephanie', 'Hamilton', 'stephanieh@gmail.com', null, 'stephanieh@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
@@ -126,14 +128,20 @@ INSERT INTO Posts VALUES (null, 3, 1, 'title2', 20211116, 'url2', 'content2', fa
 INSERT INTO Posts VALUES (null, 2, 1,'title3', 20211120, 'url3', 'content3', true);
 
 -- Post Tags
-INSERT INTO PostTags VALUES (null, 2, 1)
+INSERT INTO PostTags VALUES (null, 2, 1);
 
 UPDATE users
 SET is_staff = True
 WHERE is_staff = 'true';
 
-SELECT * FROM Subscriptions
-
 SELECT * FROM Users
-DROP TABLE Subscriptions
 
+SELECT * FROM DemotionQueue
+DROP TABLE Users
+
+SELECT users.*, count(subscriptions.author_id) as number_of_subs
+from users
+left join subscriptions
+on (users.id = subscriptions.author_id)
+group by
+users.id

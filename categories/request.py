@@ -1,6 +1,5 @@
 import sqlite3
 import json
-# from sqlite3.dbapi2 import SQLITE_UPDATE
 
 from models import Category
 
@@ -36,7 +35,6 @@ def get_all_categories():
             c.label
         FROM Categories c
         """)
-
 
         categories = []
 
@@ -101,5 +99,3 @@ def update_category(id, new_cat):
     else:
         # Forces 204 response by main module
         return True
-
-

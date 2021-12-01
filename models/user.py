@@ -1,7 +1,7 @@
 class User():
     def __init__(self, first_name, last_name,
                 email='', bio='', username='', password='', profile_image_url='',
-                created_on=None, active=True, is_staff=True, id=None):
+                created_on=None, active=True, is_staff=False, id=None):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name

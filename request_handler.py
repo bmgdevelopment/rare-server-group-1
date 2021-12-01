@@ -1,10 +1,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from subscriptions import (get_all_subscriptions, get_single_subscription, get_subscription_by_author_id, create_subscription)
 import json
-
 from comments import get_all_comments, get_single_comment
 from categories import get_single_category, get_all_categories, create_category, update_category, delete_category
-from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user, update_user)
-from users.request import delete_user
+from users import (create_user, get_all_users, get_single_user, get_user_by_email, login_user)
+from posts import (create_post, get_all_posts, get_single_post, delete_post, update_post)
+from tags import get_all_tags, get_single_tag, create_tag, update_tag, delete_tag
 
 class RareRequestHandler(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -53,27 +54,47 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         if len(parsed) == 2:
             ( resource, id ) = parsed
 
-            if resource == "users":
+            if resource == "posts":
                 if id is not None:
-                    response = f"{get_single_user(id)}"
+                    response = f"{get_single_post(id)}"
                 else:
-                    response = f"{get_all_users()}"
+                    response = f"{get_all_posts()}"
+            elif resource == "users":
+                if id is not None:
+                    response = f'{get_single_user(id)}'
+                else:
+                    response = f'{get_all_users()}'
             elif resource == "categories":
                 if id is not None:
                     response = f"{get_single_category(id)}"
                 else:
                     response = f"{get_all_categories()}"
+            elif resource == "subscriptions":
+                if id is not None:
+                    response = f"{get_single_subscription(id)}"
+                else:
+                    response = f"{get_all_subscriptions()}"
+            elif resource == "tags":
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = f"{get_all_tags()}"
             elif resource == "comments":
                 if id is not None:
                     response = f"{get_single_comment(id)}"
                 else:
                     response = f"{get_all_comments()}"
 
+
         elif len(parsed) == 3:
             ( resource, key, value ) = parsed
 
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
+
+
+            elif key == "author_id" and resource == "subscriptions":
+                response = get_subscription_by_author_id(value)
 
 
         self.wfile.write(response.encode())
@@ -99,6 +120,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             else:
                 response = { 'valid': False }
                 self._set_headers(404)
+                self.wfile.write(json.dumps(response).encode())
 
         if self.path == '/register':
             try:
@@ -113,38 +135,68 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                     'error': str(e)
                 }
             self._set_headers(201)
+            self.wfile.write(json.dumps(response).encode())
 
+
+        # CREATE NEW CATEGORY
         new_category = None
 
         if resource == "categories":
             new_category = create_category(post_body)
+            self._set_headers(201)
             self.wfile.write(f"{new_category}".encode())
 
+        new_post = None
 
-        self.wfile.write(json.dumps(response).encode())
+        if resource == "posts":
+            new_post = create_post(post_body)
+            self._set_headers(201)
+            self.wfile.write(f"{new_post}".encode())
+
+        # CREATE NEW TAG
+        new_tag = None
+
+        if resource == "tags":
+            new_category = create_tag(post_body)
+            self.wfile.write(f"{new_tag}".encode())
+
+
+        new_subscription = None
+
+
+        if resource == "subscriptions":
+            new_subscription = create_subscription(post_body)
+            self._set_headers(201)
+            self.wfile.write(f"{new_subscription}".encode())
 
 
     def do_PUT(self):
-            content_len = int(self.headers.get('content-length', 0))
-            post_body = self.rfile.read(content_len)
-            post_body = json.loads(post_body)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
 
-            # Parse the URL
-            (resource, id) = self.parse_url(self.path)
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
 
-            success = False
+        success = False
 
-            if resource == "categories":
-                success = update_category(id, post_body)
-            elif resource == "users":
-                success = update_user(id, post_body)
+        if resource == "categories":
+            success = update_category(id, post_body)
+        # rest of the elif's
+        elif resource == "posts":
+            success = update_post(id, post_body)
 
-            if success:
-                self._set_headers(204)
-            else:
-                self._set_headers(404)
+        elif resource == "tags":
+            success = update_tag(id, post_body)
+        # rest of the elif's
 
-            self.wfile.write("".encode())
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+
+        self.wfile.write("".encode())
+
 
 
     def do_DELETE(self):
@@ -159,11 +211,18 @@ class RareRequestHandler(BaseHTTPRequestHandler):
         # Delete a single category from the list
         if resource == "categories":
             delete_category(id)
-        elif resource == "users":
-            delete_user(id)
+
+        if resource == "posts":
+            delete_post(id)
+        # DELETE ONE TAG
+        # ------------------
+        # Delete a single tag from the list
+        if resource == "tags":
+            delete_tag(id)
 
         # Encode the new category and send in response
             self.wfile.write("".encode())
+
 
 
 def main():
