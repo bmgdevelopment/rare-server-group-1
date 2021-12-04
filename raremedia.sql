@@ -113,7 +113,7 @@ INSERT INTO `Users` VALUES (null, 'Blake', 'McAdams', 'blakem@gmail.com', null, 
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
 
 -- Subscriptions Insert
-INSERT INTO Subscriptions VALUES (null, 1, 2, '20211113', 'current subscription' );
+INSERT INTO Subscriptions VALUES (null, 1, 2, '2021-11-13', 'current subscription' );
 
 -- Comments Insert
 INSERT INTO Comments VALUES (null, 2, 3, 'New comment for post', '2021112');
@@ -131,12 +131,15 @@ INSERT INTO PostTags VALUES (null, 2, 1);
 
 UPDATE users
 SET is_staff = True
-WHERE is_staff = 'true'
+WHERE is_staff = 'true';
 
 SELECT * FROM Users
 
-SELECT * FROM Posts
- 
 
- 
+SELECT * FROM DemotionQueue
 DROP TABLE Users
+
+SELECT * FROM Postsgit
+
+DROP TABLE Users
+

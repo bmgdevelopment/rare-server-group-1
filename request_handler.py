@@ -60,8 +60,8 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
             if resource == "posts":
                 if id is not None:
-                    response = f"{get_single_post(id)}"    
-                else: 
+                    response = f"{get_single_post(id)}"
+                else:
                     response = f"{get_all_posts()}"
             elif resource == "users":
                 if id is not None:
@@ -74,9 +74,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_categories()}"
             elif resource == "subscriptions":
-                if id is not None: 
+                if id is not None:
                     response = f"{get_single_subscription(id)}"
-                else: 
+                else:
                     response = f"{get_all_subscriptions()}"
             elif resource == "tags":
                 if id is not None:
@@ -95,13 +95,13 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
             if key == "email" and resource == "users":
                 response = get_user_by_email(value)
-                
+
             if key == "title" and resource == "posts":
                 response = get_post_by_title(value)
 
             elif key == "author_id" and resource == "subscriptions":
                 response = get_subscription_by_author_id(value)
-            
+
         self.wfile.write(response.encode())
 
 
@@ -124,8 +124,9 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             else:
                 response = { 'valid': False }
                 self._set_headers(404)
+
             self.wfile.write(json.dumps(response).encode())
-            
+
         if self.path == '/register':
             try:
                 new_user = create_user(post_body)
@@ -141,50 +142,46 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             self._set_headers(201)
             self.wfile.write(json.dumps(response).encode())
 
+
         # CREATE NEW CATEGORY
         new_category = None
-      
+
         if resource == "categories":
-           new_category = create_category(post_body)   
-           self._set_headers(201)        
-           self.wfile.write(f"{new_category}".encode())
+            new_category = create_category(post_body)
+            self._set_headers(201)
+            self.wfile.write(f"{new_category}".encode())
 
         new_post = None
-        
+
         if resource == "posts":
             new_post = create_post(post_body)
             self._set_headers(201)
             self.wfile.write(f"{new_post}".encode())
-            
+
         # CREATE NEW TAG
         new_tag = None
-      
+
         if resource == "tags":
-           new_tag = create_tag(post_body)           
-           self.wfile.write(f"{new_tag}".encode())
-           
-        
-        
-        # CREATE NEW COMMENT  
+
+            new_tag = create_tag(post_body)
+            self.wfile.write(f"{new_tag}".encode())
+
+
+
+        # CREATE NEW COMMENT
         new_comment = None
-        
+
         if resource == "comments":
             new_comment = create_comment(post_body)
             self.wfile.write(f"{new_comment}".encode())
-            
+
         new_subscription = None
-        
+
+>>>>>>> main
         if resource == "subscriptions":
             new_subscription = create_subscription(post_body)
-            self._set_headers(201) 
+            self._set_headers(201)
             self.wfile.write(f"{new_subscription}".encode())
-        
-        
-    
-            
-        
-        
-        
 
 
     def do_PUT(self):
@@ -202,7 +199,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
 
         elif resource == "posts":
             success = update_post(id, post_body)
-        
+
         elif resource == "tags":
             success = update_tag(id, post_body)
 
@@ -227,7 +224,7 @@ class RareRequestHandler(BaseHTTPRequestHandler):
             delete_category(id)
 
         if resource == "posts":
-            delete_post(id) 
+            delete_post(id)
         # DELETE ONE TAG
         # ------------------
         # Delete a single tag from the list
