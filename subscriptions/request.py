@@ -1,5 +1,7 @@
+from os import curdir
 import sqlite3
 import json
+from sqlite3.dbapi2 import Cursor
 from models import Subscription
 
 def get_single_subscription(id):
@@ -104,6 +106,42 @@ def create_subscription(new_subscription):
         new_subscription['created_on'] = str(subscription.created_on)
         new_subscription['ended_on'] = str(subscription.ended_on)
         new_subscription['id'] = id
+    
+        
+    return json.dumps(new_subscription)
+
+def delete_subscription(id):
+    with sqlite3.connect("./raremedia.db") as conn:
+        
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        DELETE FROM Subscriptions
+        WHERE id = ?
+        """, (id,))
+        
+def update_subscription(id, new_subscription):
+    with sqlite3.connect("./raremedia.db") as conn:
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        UPDATE Subscriptions
+            SET
+                follower_id = ?,
+                author_id = ?,
+                created_on = ?,
+                ended_on = ?
+            WHERE id = ?
+            """, (new_subscription['follower_id'], new_subscription['author_id'],
+                  new_subscription['created_on'], new_subscription['ended_on'], id, ))
+
+        rows_affected = db_cursor.rowcount
+    
+    if rows_affected == 0:
+        return False
+    
+    else:
+        return True
 
 
     return json.dumps(new_subscription)

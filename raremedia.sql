@@ -104,6 +104,10 @@ INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.c
 
 -- Users Insert
 INSERT INTO `Users` VALUES (null, 'Melody', 'Barker', 'melb@gmail.com', null, 'melb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, true);
+INSERT INTO `Users` VALUES (null, 'Sam', 'Barker', 'samb@gmail.com', null, 'samb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
+INSERT INTO `Users` VALUES (null, 'Brittany', 'Garrett', 'bmg@gmail.com', null, 'bmg@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
+INSERT INTO `Users` VALUES (null, 'Stephanie', 'Hamilton', 'stephanieh@gmail.com', null, 'steohanieh@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
+INSERT INTO `Users` VALUES (null, 'Blake', 'McAdams', 'blakem@gmail.com', null, 'blakemb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, true);
 INSERT INTO `Users` VALUES (null, 'Sam', 'Baker', 'samb@gmail.com', null, 'samb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
 INSERT INTO `Users` VALUES (null, 'Brittany', 'Garrett', 'bmg@gmail.com', null, 'bmg@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
 INSERT INTO `Users` VALUES (null, 'Stephanie', 'Hamilton', 'stephanieh@gmail.com', null, 'steohanieh@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
@@ -113,8 +117,9 @@ INSERT INTO `Users` VALUES (null, 'Blake', 'McAdams', 'blakem@gmail.com', null, 
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
 
 -- Subscriptions Insert
-INSERT INTO Subscriptions VALUES (null, 1, 2, '2021-11-13', 'current subscription' );
-
+INSERT INTO Subscriptions VALUES (null, 1, 2, '2021-11-13', 'current subscription');
+INSERT INTO Subscriptions VALUES (null, 2, 1, '2021-11-30', 'current subscription');
+INSERT INTO Subscriptions VALUES (null, 1, 3, '2021-11-29', 'current subscription')
 -- Comments Insert
 INSERT INTO Comments VALUES (null, 2, 3, 'New comment for post', '2021112');
 
@@ -135,6 +140,13 @@ WHERE is_staff = 'true';
 
 SELECT * FROM Users
 
+SELECT * FROM Posts
+ 
+SELECT * FROM Subscriptions
+ 
+DROP TABLE Users
+
+DROP TABLE Subscriptions
 
 SELECT * FROM DemotionQueue
 DROP TABLE Users
