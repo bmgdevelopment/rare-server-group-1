@@ -108,6 +108,11 @@ INSERT INTO `Users` VALUES (null, 'Sam', 'Barker', 'samb@gmail.com', null, 'samb
 INSERT INTO `Users` VALUES (null, 'Brittany', 'Garrett', 'bmg@gmail.com', null, 'bmg@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
 INSERT INTO `Users` VALUES (null, 'Stephanie', 'Hamilton', 'stephanieh@gmail.com', null, 'steohanieh@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
 INSERT INTO `Users` VALUES (null, 'Blake', 'McAdams', 'blakem@gmail.com', null, 'blakemb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, true);
+INSERT INTO `Users` VALUES (null, 'Sam', 'Baker', 'samb@gmail.com', null, 'samb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
+INSERT INTO `Users` VALUES (null, 'Brittany', 'Garrett', 'bmg@gmail.com', null, 'bmg@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
+INSERT INTO `Users` VALUES (null, 'Stephanie', 'Hamilton', 'stephanieh@gmail.com', null, 'steohanieh@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, false);
+INSERT INTO `Users` VALUES (null, 'Blake', 'McAdams', 'blakem@gmail.com', null, 'blakemb@gmail.com', '123', 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png', '2021-11-19', true, true);
+
 -- DemotionQueue Insert
 INSERT INTO DemotionQueue VALUES ('No Action', 1, 1);
 
@@ -131,7 +136,7 @@ INSERT INTO PostTags VALUES (null, 2, 1);
 
 UPDATE users
 SET is_staff = True
-WHERE is_staff = 'true'
+WHERE is_staff = 'true';
 
 SELECT * FROM Users
 
@@ -142,3 +147,11 @@ SELECT * FROM Subscriptions
 DROP TABLE Users
 
 DROP TABLE Subscriptions
+
+SELECT * FROM DemotionQueue
+DROP TABLE Users
+
+SELECT * FROM Postsgit
+
+DROP TABLE Users
+
